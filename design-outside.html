@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设计之外 · 李振鹏</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Noto+Sans+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', system-ui, sans-serif;
+            color: #1a1a1a;
+            background: #ffffff;
+            min-height: 100vh;
+        }
+        .font-serif-title {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+        .design-wordmark {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-weight: 900;
+            letter-spacing: 0.02em;
+            color: #fff;
+            -webkit-text-stroke: 1.5px #000;
+            text-shadow: 0 0 0 #000;
+        }
+        .about-me-display {
+            font-weight: 900;
+            line-height: 0.85;
+            letter-spacing: -0.02em;
+            color: #6366f1;
+        }
+        .about-me-display .big-a {
+            font-size: 3.5rem;
+            display: inline-block;
+            transform: translateY(0.05em);
+        }
+        .dot-grid {
+            background-image: radial-gradient(circle, rgba(99, 102, 241, 0.35) 1.5px, transparent 1.5px);
+            background-size: 10px 10px;
+        }
+        .bracket-box {
+            border-left: 3px solid #6366f1;
+            border-right: 3px solid #6366f1;
+            border-radius: 2px;
+            position: relative;
+        }
+        .bracket-box::before,
+        .bracket-box::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 12px;
+            border-left: 3px solid #6366f1;
+            border-right: 3px solid #6366f1;
+        }
+        .bracket-box::before {
+            top: 0;
+            border-top: 3px solid #6366f1;
+            border-radius: 4px 4px 0 0;
+        }
+        .bracket-box::after {
+            bottom: 0;
+            border-bottom: 3px solid #6366f1;
+            border-radius: 0 0 4px 4px;
+        }
+        #pdf-frame { min-height: calc(100vh - 10rem); }
+
+        /* 云端飞入动画 */
+        body {
+            animation: cloudFlyIn 0.8s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+            transform-origin: center center;
+        }
+
+        @keyframes cloudFlyIn {
+            0% {
+                transform: scale(1.3) translateZ(200px) translateY(80px);
+                filter: blur(15px) brightness(1.4);
+                opacity: 0;
+            }
+            30% {
+                opacity: 1;
+                filter: blur(5px) brightness(1.1);
+            }
+            60% {
+                filter: blur(2px) brightness(1);
+            }
+            100% {
+                transform: scale(1) translateZ(0) translateY(0);
+                filter: blur(0) brightness(1);
+                opacity: 1;
+            }
+        }
+
+        /* 主页后退效果 */
+        .main-retreating {
+            animation: mainRetreat 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes mainRetreat {
+            0% {
+                transform: scale(1) translateZ(0);
+                filter: blur(0) brightness(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0.8) translateZ(-150px);
+                filter: blur(10px) brightness(0.6);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased relative pb-16">
+    <!-- 底部淡紫点阵装饰 -->
+    <div class="pointer-events-none fixed bottom-0 left-0 w-40 h-32 dot-grid opacity-60 z-0"></div>
+    <div class="pointer-events-none fixed bottom-0 right-0 w-48 h-36 dot-grid opacity-60 z-0"></div>
+
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200">
+        <div class="max-w-6xl mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
+            <a id="back-to-portfolio" href="3.0.html" class="text-sm font-bold text-slate-600 hover:text-indigo-600 flex items-center gap-2 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+                返回作品集
+            </a>
+            <a href="design-outside/01.pdf" target="_blank" class="text-sm font-bold bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 001.884 2.541l.857-.6A75.03 75.03 0 0118 12.75l-.857.6c.17.198.367.343.57.343h.008c.203 0 .4-.145.57-.343l.857-.6A75.03 75.03 0 0121 9.75l.857.6c.17.198.367.343.57.343h.008c.203 0 .4-.145.57-.343l.857-.6A2.25 2.25 0 0016.5 9.75z" />
+                </svg>
+                新标签页打开
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 md:px-8 py-8 md:py-12 relative z-10">
+        <div class="border-2 border-black bg-white p-6 md:p-10 lg:p-12">
+            <!-- 顶部 Design Beyond 标题 -->
+            <header class="mb-10 md:mb-12">
+                <div class="inline-block border-2 border-black px-6 py-2 md:px-10 md:py-3">
+                    <span class="design-wordmark text-4xl md:text-6xl">Design Beyond</span>
+                </div>
+            </header>
+
+            <div class="flex flex-col lg:flex-row gap-10 lg:gap-12">
+                <!-- 左侧 -->
+                <aside class="lg:w-[26%] shrink-0 flex flex-col gap-6">
+                    <div class="about-me-display text-2xl md:text-3xl uppercase">
+                        <span class="big-a">B</span>EYOND<br>DESIGN
+                    </div>
+
+                    <div class="bracket-box px-4 py-6 bg-slate-50">
+                        <p class="text-sm md:text-base leading-relaxed text-slate-800 relative z-10">
+                            一次全面的个人复盘<br>
+                            <span class="text-indigo-600 font-bold mt-2 inline-block">2025</span>
+                        </p>
+                    </div>
+
+                    <div class="space-y-3 text-sm font-semibold tracking-wide">
+                        <p class="font-black text-lg">设计之外</p>
+                        <p class="text-slate-600 font-medium">Beyond Design</p>
+                        <p class="text-slate-600 font-medium">全方面复盘与总结</p>
+                    </div>
+                </aside>
+
+                <!-- 右侧 PDF 预览 -->
+                <div class="flex-1 min-w-0">
+                    <div class="bg-slate-100 rounded-2xl overflow-hidden border border-slate-200/80">
+                        <div class="px-6 py-4 bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-slate-200 flex items-center justify-between">
+                            <span class="text-sm font-bold text-slate-700">设计之外.pdf</span>
+                            <span class="text-xs text-slate-400">PDF 文档</span>
+                        </div>
+                        <iframe id="pdf-frame" title="PDF 预览" class="w-full bg-gray-200" src="design-outside/01.pdf"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 返回时添加后退动画
+            var backLink = document.getElementById('back-to-portfolio');
+            if (backLink) {
+                backLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.body.classList.add('main-retreating');
+                    setTimeout(() => {
+                        window.location.href = backLink.href;
+                    }, 500);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
