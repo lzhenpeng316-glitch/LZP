@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - 李振鹏</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Noto+Sans+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', system-ui, sans-serif;
+            color: #1a1a1a;
+            background: #ffffff;
+            min-height: 100vh;
+        }
+        .font-serif-title {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+        .profile-wordmark {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-weight: 900;
+            letter-spacing: 0.02em;
+            color: #fff;
+            -webkit-text-stroke: 1.5px #000;
+            text-shadow: 0 0 0 #000;
+        }
+        .about-me-display {
+            font-weight: 900;
+            line-height: 0.85;
+            letter-spacing: -0.02em;
+            color: #2563eb;
+        }
+        .about-me-display .big-a {
+            font-size: 3.5rem;
+            display: inline-block;
+            transform: translateY(0.05em);
+        }
+        .dot-grid {
+            background-image: radial-gradient(circle, rgba(37, 99, 235, 0.35) 1.5px, transparent 1.5px);
+            background-size: 10px 10px;
+        }
+        .bracket-box {
+            border-left: 3px solid #2563eb;
+            border-right: 3px solid #2563eb;
+            border-radius: 2px;
+            position: relative;
+        }
+        .bracket-box::before,
+        .bracket-box::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 12px;
+            border-left: 3px solid #2563eb;
+            border-right: 3px solid #2563eb;
+        }
+        .bracket-box::before {
+            top: 0;
+            border-top: 3px solid #2563eb;
+            border-radius: 4px 4px 0 0;
+        }
+        .bracket-box::after {
+            bottom: 0;
+            border-bottom: 3px solid #2563eb;
+            border-radius: 0 0 4px 4px;
+        }
+        .photo-frame {
+            border: 2px solid #000;
+            aspect-ratio: 1;
+            background: #ffffff;
+            box-sizing: border-box;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        @media (min-width: 768px) {
+            .photo-frame {
+                padding: 16px;
+            }
+        }
+        .photo-frame-inner {
+            flex: 1 1 0;
+            min-height: 0;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        .photo-frame img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* 云端飞入动画 */
+        body {
+            animation: cloudFlyIn 0.8s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+            transform-origin: center center;
+        }
+
+        @keyframes cloudFlyIn {
+            0% {
+                transform: scale(1.3) translateZ(200px) translateY(80px);
+                filter: blur(15px) brightness(1.4);
+                opacity: 0;
+            }
+            30% {
+                opacity: 1;
+                filter: blur(5px) brightness(1.1);
+            }
+            60% {
+                filter: blur(2px) brightness(1);
+            }
+            100% {
+                transform: scale(1) translateZ(0) translateY(0);
+                filter: blur(0) brightness(1);
+                opacity: 1;
+            }
+        }
+
+        /* 主页后退效果 */
+        .main-retreating {
+            animation: mainRetreat 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes mainRetreat {
+            0% {
+                transform: scale(1) translateZ(0);
+                filter: blur(0) brightness(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0.8) translateZ(-150px);
+                filter: blur(10px) brightness(0.6);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased relative pb-16">
+    <!-- 底部淡蓝点阵装饰 -->
+    <div class="pointer-events-none fixed bottom-0 left-0 w-40 h-32 dot-grid opacity-60 z-0"></div>
+    <div class="pointer-events-none fixed bottom-0 right-0 w-48 h-36 dot-grid opacity-60 z-0"></div>
+
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200">
+        <div class="max-w-6xl mx-auto px-4 md:px-8 py-4 flex items-center">
+            <a id="back-to-portfolio" href="1.0.html" class="text-sm font-bold text-slate-600 hover:text-blue-600 flex items-center gap-2 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+                返回作品集
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 md:px-8 py-8 md:py-12 relative z-10">
+        <div class="border-2 border-black bg-white p-6 md:p-10 lg:p-12">
+            <!-- 顶部 Profile 标题 -->
+            <header class="mb-10 md:mb-12">
+                <div class="inline-block border-2 border-black px-6 py-2 md:px-10 md:py-3">
+                    <span class="profile-wordmark text-4xl md:text-6xl">Profile</span>
+                </div>
+            </header>
+
+            <div class="flex flex-col lg:flex-row gap-10 lg:gap-12">
+                <!-- 左侧 About Me -->
+                <aside class="lg:w-[26%] shrink-0 flex flex-col gap-6">
+                    <div class="about-me-display text-2xl md:text-3xl uppercase">
+                        <span class="big-a">A</span>BOUT<br>ME
+                    </div>
+
+                    <div class="photo-frame relative min-h-[200px]">
+                        <div class="photo-frame-inner">
+                            <img id="profile-img" src="profile-photo.png" alt="李振鹏" width="400" height="400">
+                            <div id="photo-fallback" class="hidden absolute inset-0 flex items-center justify-center text-slate-400 text-xs md:text-sm p-4 text-center leading-relaxed bg-slate-100">
+                                将个人照片命名为 <span class="font-mono text-slate-600">profile-photo.png</span>，与本页放在同一文件夹即可显示
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1 text-sm md:text-base font-semibold tracking-wide">
+                        <p class="font-black text-lg">LIZHENPENG / 李振鹏</p>
+                        <p class="text-slate-600 font-medium">(2004.3)</p>
+                        <p class="text-slate-600 font-medium">ISFJ-T_MBTI</p>
+                    </div>
+
+                    <div class="mt-auto pt-4 border-t border-slate-200 space-y-3 text-xs md:text-sm text-slate-700 leading-relaxed">
+                        <p><span class="text-blue-600 font-bold">微信</span>　Lzp20040316</p>
+                        <p><span class="text-blue-600 font-bold">电话</span>　18842898859</p>
+                        <p><span class="text-blue-600 font-bold">邮箱</span>　3248130448@qq.com</p>
+                        <p><span class="text-blue-600 font-bold">地址</span>　辽宁省大连市旅顺口区</p>
+                    </div>
+                </aside>
+
+                <!-- 右侧主内容 -->
+                <div class="flex-1 min-w-0">
+                    <div class="bg-slate-100 rounded-2xl p-6 md:p-8 lg:p-10 border border-slate-200/80 space-y-10">
+
+                        <!-- 上排：学历 + 软件 -->
+                        <div class="grid md:grid-cols-2 gap-8 md:gap-10">
+                            <section>
+                                <h2 class="text-xs md:text-sm font-black tracking-widest text-slate-800 mb-4 border-b-2 border-blue-500 inline-block pb-1">
+                                    EDUCATION_学历
+                                </h2>
+                                <p class="text-blue-600 font-bold text-sm md:text-base mb-1">2022–2026</p>
+                                <p class="text-sm md:text-base font-medium leading-relaxed">
+                                    /辽宁大学 艺术设计学 (211)
+                                </p>
+                            </section>
+
+                            <section>
+                                <h2 class="text-xs md:text-sm font-black tracking-widest text-slate-800 mb-4 border-b-2 border-blue-500 inline-block pb-1">
+                                    SOFTWARE USED_使用软件
+                                </h2>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="px-3 py-1.5 rounded-md bg-white border border-slate-300 text-xs font-bold shadow-sm">PS</span>
+                                    <span class="px-3 py-1.5 rounded-md bg-white border border-slate-300 text-xs font-bold shadow-sm">AI</span>
+                                    <span class="px-3 py-1.5 rounded-md bg-white border border-slate-300 text-xs font-bold shadow-sm">AE</span>
+                                    <span class="px-3 py-1.5 rounded-md bg-white border border-slate-300 text-xs font-bold shadow-sm">Figma</span>
+                                    <span class="px-3 py-1.5 rounded-md bg-white border border-slate-300 text-xs font-bold shadow-sm">剪映</span>
+                                </div>
+                                <div class="bracket-box px-4 py-5 bg-white/60">
+                                    <p class="text-xs md:text-sm leading-relaxed text-slate-800 relative z-10">
+                                        在校期间累积了平面海报, 动态海报, 书记装帧, 品牌设计, UI/UX界面设计, 逐步培养整合思考能力和设计表达能力, 荣获多项奖项。
+                                    </p>
+                                    <p class="mt-4 text-xs md:text-sm text-slate-700 relative z-10 flex gap-2 items-start">
+                                        <span class="text-blue-600 font-bold shrink-0">●</span>
+                                        <span>UI/UX, 品牌, 平面等的设计能力</span>
+                                    </p>
+                                </div>
+                            </section>
+                        </div>
+
+                        <!-- 获奖 -->
+                        <section>
+                            <h2 class="text-xs md:text-sm font-black tracking-widest text-slate-800 mb-4 border-b-2 border-blue-500 inline-block pb-1">
+                                AWARDS_获奖经历
+                            </h2>
+                            <ul class="space-y-3 text-xs md:text-sm leading-relaxed">
+                                <li class="flex gap-2"><span class="text-blue-600 font-bold shrink-0">●</span>2025 / 中国创意挑战大赛_葫芦岛文旅专项大赛_国赛优秀奖</li>
+                                <li class="flex gap-2"><span class="text-blue-600 font-bold shrink-0">●</span>2025 / 全国大学生广告艺术大赛_Aa平面广告类_省赛一等奖</li>
+                                <li class="flex gap-2"><span class="text-blue-600 font-bold shrink-0">●</span>2025 / 全国大学生广告艺术大赛_Aa平面广告类_省赛二等奖</li>
+                                <li class="flex gap-2"><span class="text-blue-600 font-bold shrink-0">●</span>2025 / 全国大学生广告艺术大赛_Ba影视广告类_省赛三等奖</li>
+                            </ul>
+                        </section>
+
+                        <!-- 实习 -->
+                        <section>
+                            <h2 class="text-xs md:text-sm font-black tracking-widest text-slate-800 mb-5 border-b-2 border-blue-500 inline-block pb-1">
+                                INTERNSHIP EXPERIENCE_实习经历
+                            </h2>
+                            <div class="space-y-8">
+                                <div>
+                                    <p class="font-bold text-sm md:text-base text-slate-900">北京讯听网络技术有限公司 <span class="text-blue-600 font-semibold">(2025.04–2025.07)</span></p>
+                                    <p class="mt-2 text-xs md:text-sm text-slate-700 leading-relaxed">
+                                        参与听听FM软件版本迭代，聚焦用户体验优化与核心功能迭代。协助完成听听FM核心链路深度优化并聚焦用户听声音链路与会员链路，配合团队高保真原型落地。
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-sm md:text-base text-slate-900">深圳华大生命科学研究院 <span class="text-blue-600 font-semibold">(2025.09–2026.02)</span></p>
+                                    <p class="mt-2 text-xs md:text-sm text-slate-700 leading-relaxed">
+                                        参与工具类与AI类B端的页面版本迭代，独立推动AI类定制项目，负责与产品对接，分析产品需求和用户使用习惯，把控设计产出，完善产品交互并输出UI细节及设计标注，跟进开发，还原和上线效果。
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var back = document.getElementById('back-to-portfolio');
+            if (back) {
+                var from = new URLSearchParams(location.search).get('from');
+                if (from === '2.0' || from === '2') {
+                    back.href = '2.0.html';
+                } else if (from === '3.0' || from === '3') {
+                    back.href = '3.0.html';
+                }
+
+                // 返回时添加后退动画
+                back.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.body.classList.add('main-retreating');
+                    setTimeout(() => {
+                        window.location.href = back.href;
+                    }, 500);
+                });
+            }
+            var img = document.getElementById('profile-img');
+            var fb = document.getElementById('photo-fallback');
+            if (!img || !fb) return;
+            img.addEventListener('error', function () {
+                img.classList.add('hidden');
+                fb.classList.remove('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
