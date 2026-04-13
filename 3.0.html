@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云端视角作品集 - 设计师</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+            color: #333333;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .font-serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        ::selection {
+            background-color: #3b82f6;
+            color: #ffffff;
+        }
+
+        .mac-window-shadow {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 0 15px rgba(255,255,255,0.5);
+        }
+        
+        /* =========================================
+           更真实的蓝天白云 (SVG分形噪声 + 模糊) 
+           ========================================= */
+        .sky-bg {
+            /* 更细腻的天空渐变色，模拟大气散射 */
+            background: linear-gradient(180deg, #3b82f6 0%, #7dd3fc 45%, #e0f2fe 100%);
+            background-attachment: fixed;
+        }
+
+        /* 基础真实云朵容器 */
+        .real-cloud {
+            position: absolute;
+            background: #ffffff;
+            border-radius: 50%;
+            /* 应用我们定义在 HTML 底部的 SVG 真实云层滤镜，并加上一点模糊让边缘像水汽 */
+            filter: url(#cloud-distortion) blur(5px);
+            will-change: transform;
+            z-index: 0;
+            left: -400px; /* 初始位置隐藏在屏幕左侧外 */
+        }
+
+        /* 利用复杂的多重投影 (box-shadow) 堆叠出云朵高低起伏的体积感 */
+        .cloud-1 {
+            width: 150px; height: 50px; 
+            top: 15%; 
+            box-shadow: 
+                40px -30px 50px 15px #fff,
+                90px -15px 40px 20px #fff,
+                130px -25px 50px 10px #fff,
+                60px 10px 30px 10px #fff;
+            animation: float-cloud 80s linear infinite;
+            opacity: 0.85;
+            --scale: 1.5;
+        }
+
+        .cloud-2 {
+            width: 100px; height: 35px; 
+            top: 35%; 
+            box-shadow: 
+                30px -20px 30px 10px rgba(255,255,255,0.9),
+                60px -10px 25px 15px rgba(255,255,255,0.9),
+                20px 5px 20px 5px rgba(255,255,255,0.8);
+            animation: float-cloud 60s linear infinite 15s; /* 延迟起飞 */
+            opacity: 0.7;
+            --scale: 1.2;
+        }
+
+        .cloud-3 {
+            width: 200px; height: 60px; 
+            top: 65%; 
+            box-shadow: 
+                50px -40px 60px 20px #fff,
+                110px -20px 50px 25px #fff,
+                160px -35px 60px 15px #fff,
+                80px 15px 40px 15px #fff;
+            animation: float-cloud 110s linear infinite 5s;
+            opacity: 0.9;
+            --scale: 1.8;
+        }
+
+        .cloud-4 {
+            width: 80px; height: 25px; 
+            top: 25%; 
+            box-shadow: 
+                25px -15px 25px 8px rgba(255,255,255,0.6),
+                50px -5px 20px 12px rgba(255,255,255,0.6);
+            animation: float-cloud 90s linear infinite 35s;
+            opacity: 0.5;
+            --scale: 0.9;
+        }
+
+        @keyframes float-cloud {
+            0% { transform: translateX(0) scale(var(--scale)); }
+            100% { transform: translateX(calc(100vw + 800px)) scale(var(--scale)); }
+        }
+
+        /* =========================================
+           标题浮现动画
+           ========================================= */
+        .hero-title {
+            opacity: 0;
+            transform: translateY(60px);
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =========================================
+           卡片发牌动画
+           ========================================= */
+        .card-deal {
+            opacity: 0;
+            transform: translateY(120px) scale(0.95);
+        }
+
+        .card-1 {
+            animation: dealCard 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+        }
+
+        .card-2 {
+            animation: dealCard 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s forwards;
+        }
+
+        .card-3 {
+            animation: dealCard 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.9s forwards;
+        }
+
+        @keyframes dealCard {
+            0% {
+                opacity: 0;
+                transform: translateY(150px) scale(0.9) rotateX(15deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotateX(0deg);
+            }
+        }
+
+        /* 子项目卡片展开时的动画 */
+        .projects-container {
+            opacity: 0;
+            transform: translateY(60px) scale(0.95);
+        }
+
+        .projects-container.visible {
+            animation: elasticIn 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+
+        .projects-container.hiding {
+            animation: elasticOut 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+
+        @keyframes elasticIn {
+            0% {
+                opacity: 0;
+                transform: translateY(80px) scale(0.9);
+            }
+            60% {
+                opacity: 1;
+                transform: translateY(-10px) scale(1.02);
+            }
+            80% {
+                transform: translateY(5px) scale(0.99);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes elasticOut {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(60px) scale(0.95);
+            }
+        }
+
+        /* =========================================
+           作品集小卡片发光效果
+           ========================================= */
+        .project-card {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 1rem;
+            background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.3), rgba(255,255,255,0.8));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+            filter: blur(8px);
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.2), 0 0 30px rgba(255, 255, 255, 0.4);
+        }
+
+        /* =========================================
+           云层过渡效果
+           ========================================= */
+        .cloud-transition-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .cloud-transition-overlay.active {
+            opacity: 1;
+        }
+
+        .cloud-transition-overlay::before {
+            content: '';
+            position: absolute;
+            inset: -50%;
+            background:
+                radial-gradient(ellipse 80% 60% at 50% 50%, rgba(255,255,255,0.95) 0%, rgba(220,235,255,0.9) 40%, rgba(200,220,255,0.85) 60%, transparent 70%),
+                radial-gradient(ellipse 100% 80% at 50% 50%, rgba(255,255,255,0.98) 0%, rgba(230,245,255,0.95) 50%, transparent 75%);
+            animation: cloudPulse 1.5s ease-in-out infinite;
+        }
+
+        .cloud-transition-overlay::after {
+            content: '';
+            position: absolute;
+            inset: -100%;
+            background: radial-gradient(ellipse 120% 100% at 50% 50%, transparent 30%, rgba(255,255,255,0.5) 60%, rgba(200,220,255,0.8) 80%, transparent 100%);
+            animation: cloudExpand 1.5s ease-in-out infinite;
+        }
+
+        @keyframes cloudPulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        @keyframes cloudExpand {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 0.6; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        /* 主页后退动画 */
+        .home-retreating {
+            animation: homeRetreat 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes homeRetreat {
+            0% {
+                transform: scale(1) translateZ(0);
+                filter: blur(0) brightness(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0.85) translateZ(-200px);
+                filter: blur(8px) brightness(0.7);
+                opacity: 0;
+            }
+        }
+
+        /* 新页面飞入动画 */
+        .page-flying-in {
+            animation: pageFlyIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes pageFlyIn {
+            0% {
+                transform: scale(1.3) translateZ(300px) translateY(100px);
+                filter: blur(20px) brightness(1.3);
+                opacity: 0;
+            }
+            40% {
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1) translateZ(0) translateY(0);
+                filter: blur(0) brightness(1);
+                opacity: 1;
+            }
+        }
+
+        /* 云雾装饰元素 */
+        .cloud-mist {
+            position: fixed;
+            border-radius: 50%;
+            background: radial-gradient(ellipse, rgba(255,255,255,0.8) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 10000;
+        }
+    </style>
+</head>
+<body class="antialiased relative pb-32 sky-bg">
+
+    <!-- 用于生成真实云朵纹理的隐藏 SVG 滤镜库 -->
+    <svg width="0" height="0" style="position: absolute; z-index: -1;">
+        <filter id="cloud-distortion">
+            <!-- 关键：feTurbulence 产生分形噪声（像真实的云雾自然分布） -->
+            <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="15" />
+            <!-- 将噪声应用到云朵的图形位移上，撕扯出不规则的真实边缘 -->
+            <feDisplacementMap in="SourceGraphic" scale="35" />
+        </filter>
+    </svg>
+
+    <!-- 真实白云容器 -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div class="real-cloud cloud-1"></div>
+        <div class="real-cloud cloud-2"></div>
+        <div class="real-cloud cloud-3"></div>
+        <div class="real-cloud cloud-4"></div>
+    </div>
+
+    <!-- 顶部导航栏 -->
+    <nav id="navbar" class="fixed w-full top-0 z-50 transition-all duration-300 py-6">
+        <div class="max-w-6xl mx-auto px-6 md:px-12 flex justify-between items-center">
+            <a href="#" class="font-serif-title font-black text-2xl tracking-tighter text-slate-800 flex items-center space-x-2 drop-shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-slate-700">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+                <span>返回顶部</span>
+            </a>
+            <div class="hidden md:flex space-x-8 text-sm font-bold text-slate-800 drop-shadow-sm">
+                <a href="#about" class="hover:text-blue-600 transition-colors">关于我</a>
+                <a href="#portfolio" class="hover:text-blue-600 transition-colors">作品集</a>
+                <a href="#contact" class="hover:text-blue-600 transition-colors">联系方式</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero 区域大标题 -->
+    <header class="pt-32 pb-12 flex flex-col justify-center items-center relative z-10 text-center">
+        <h1 class="hero-title font-serif-title text-[7rem] md:text-[11rem] font-black leading-[0.8] tracking-tighter text-[#1e293b] relative inline-block drop-shadow-xl">
+            Port*<br>
+            <span class="ml-12">foLio</span>
+            <span class="absolute bottom-4 -right-16 text-3xl md:text-5xl font-serif-title italic font-normal text-slate-700 drop-shadow-md">(Design)</span>
+        </h1>
+    </header>
+
+    <!-- 主体内容区域：3张层叠的 Mac OS 窗口卡片 -->
+    <main class="max-w-4xl mx-auto px-4 md:px-12 relative z-20 md:-mt-8 flex flex-col items-center pb-20">
+
+        <!-- 第1张卡片 (蓝色)：个人介绍 -->
+        <a href="about.html?from=3.0" class="card-deal card-1 w-full relative z-10 group cursor-pointer block transform transition-transform duration-500 hover:-translate-y-2">
+            <div class="bg-white rounded-xl overflow-hidden mac-window-shadow">
+                <div class="bg-gray-50/90 backdrop-blur px-4 py-2.5 flex items-center justify-between border-b border-gray-200">
+                    <div class="flex space-x-1.5 items-center">
+                        <div class="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
+                        <div class="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
+                        <div class="w-3 h-3 rounded-full bg-[#27c93f]"></div>
+                        <div class="flex space-x-1 ml-4 text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-600 font-medium font-sans tracking-wide">个人介绍.docx</div>
+                    <div class="text-gray-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+                    </div>
+                </div>
+                <div class="bg-[#4fb6fb] p-8 md:p-12 flex flex-col md:flex-row items-center justify-center gap-8 relative overflow-hidden bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xNSIvPjwvc3ZnPg==')]">
+                    <div class="w-full md:w-[45%] bg-[#d7ae83] p-6 rounded shadow-lg text-slate-800 transform -rotate-2 relative z-10 border border-[#c2986c]">
+                        <div class="border-b-2 border-slate-800/20 pb-4 mb-4">
+                            <h3 class="text-xl md:text-2xl font-black font-serif-title italic">(关于设计师)</h3>
+                        </div>
+                        <div class="space-y-3 text-sm font-bold opacity-80">
+                            <div class="flex items-center space-x-2"><span class="w-4 h-4 border border-slate-800 flex items-center justify-center">✓</span> <span>UI/UX 设计</span></div>
+                            <div class="flex items-center space-x-2"><span class="w-4 h-4 border border-slate-800"></span> <span>品牌视觉</span></div>
+                            <div class="flex items-center space-x-2"><span class="w-4 h-4 border border-slate-800"></span> <span>IP 形象延展</span></div>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-[55%] text-white relative z-10 text-center md:text-left">
+                        <p class="text-lg md:text-xl font-medium leading-relaxed tracking-wider mb-6">
+                            在创意的选择框前<br>
+                            画上一个对号<br>
+                            也给数字世界留下一点光 ↺
+                        </p>
+                        <div class="inline-block bg-black text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl group-hover:bg-gray-800 transition-colors">
+                            画上句号 / 点击查看详细简历
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+        <!-- 第2张卡片 (黄色)：云平台项目 (重叠在蓝色卡片上，点击展开 3 个子项目) -->
+        <div id="portfolio-trigger" class="card-deal card-2 w-full relative z-20 -mt-10 md:-mt-16">
+            <div onclick="toggleProjects(event)" class="bg-white rounded-xl overflow-hidden mac-window-shadow border-t border-white/50 cursor-pointer group transform transition-transform duration-500 hover:-translate-y-2 relative z-20">
+                <div class="bg-gray-50/90 backdrop-blur px-4 py-2.5 flex items-center justify-between border-b border-gray-200">
+                    <div class="flex space-x-1.5 items-center">
+                        <div class="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
+                        <div class="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
+                        <div class="w-3 h-3 rounded-full bg-[#27c93f]"></div>
+                    </div>
+                    <div class="text-sm text-gray-600 font-medium font-sans tracking-wide">精选作品_合集.pdf</div>
+                    <div class="text-gray-400 text-xs font-bold tracking-widest">
+                        » <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 inline"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+                    </div>
+                </div>
+                <div class="bg-[#fce93f] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden">
+                    <div class="w-full md:w-1/2 text-slate-800 relative z-10">
+                        <div class="bg-black text-white text-xs font-bold inline-block px-3 py-1.5 rounded-full mb-4 transform -rotate-2 shadow-md">
+                            Portfolio
+                        </div>
+                        <p class="text-lg md:text-xl font-medium leading-relaxed mt-2">
+                            设计的产出没有合格与不合格<br>
+                            你交出的每一个方案<br>
+                            都是自己独一无二的思考
+                        </p>
+                    </div>
+                    <div class="w-full md:w-1/2 flex flex-col items-end relative z-10">
+                        <div class="bg-[#e9e4d6] w-full max-w-[280px] aspect-[4/3] rounded-sm shadow-lg border border-[#d1ccbf] relative p-6">
+                            <div class="absolute -top-3 right-8 flex space-x-1">
+                                <div class="w-8 h-4 bg-red-600 rounded-t-sm"></div>
+                                <div class="w-8 h-4 bg-pink-400 rounded-t-sm"></div>
+                                <div class="w-8 h-4 bg-white rounded-t-sm border border-gray-200"></div>
+                            </div>
+                            <div class="font-serif-title text-4xl text-gray-300/80 italic font-bold mt-4">Projects</div>
+                            <div class="mt-6 flex flex-col items-center justify-center space-y-3">
+                                <div class="w-24 h-12 bg-gray-200/50 rounded-full border-4 border-white flex items-center justify-center transform -rotate-12">
+                                    <span class="font-bold text-gray-400">UI/UX</span>
+                                </div>
+                                <div class="text-xs font-bold text-slate-700 bg-white/70 backdrop-blur-sm px-4 py-2 rounded-full flex items-center border border-yellow-300 shadow-sm transition-colors group-hover:bg-white/90 group-hover:shadow-md">
+                                    <span id="click-hint-text">点击展开 3 个作品卡片</span>
+                                    <svg id="click-hint-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 ml-1.5 transition-transform duration-300 animate-bounce">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="projects-container" class="hidden opacity-0 transform -translate-y-8 transition-all duration-700 ease-out pt-6 pb-12 md:pb-16 relative z-10 w-full" onclick="event.stopPropagation()">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <a href="cloud-platform.html" class="project-card bg-white rounded-xl mac-window-shadow overflow-hidden flex flex-col h-full border border-gray-100 hover:shadow-2xl transition-shadow cursor-pointer block no-underline text-inherit">
+                        <div class="bg-gray-50/90 backdrop-blur px-3 py-2 flex items-center border-b border-gray-200">
+                             <div class="flex space-x-1.5">
+                                 <div class="w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-[#ff5f56] transition-colors"></div>
+                                 <div class="w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-[#ffbd2e] transition-colors"></div>
+                                 <div class="w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-[#27c93f] transition-colors"></div>
+                             </div>
+                             <div class="mx-auto text-[10px] text-gray-500 font-medium">01_cloud-platform.pdf</div>
+                        </div>
+                        <div class="bg-gradient-to-br from-emerald-400 to-teal-600 aspect-[4/3] relative overflow-hidden flex flex-col items-center justify-center text-white p-6 text-center">
+                             <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')]"></div>
+                             <span class="font-black text-2xl md:text-3xl tracking-widest relative z-10 drop-shadow-md">DCS CLOUD</span>
+                             <span class="text-xs md:text-sm font-medium mt-2 opacity-80 relative z-10 border-t border-white/30 pt-2">全新升级 V2.0</span>
+                        </div>
+                        <div class="p-4 md:p-5 flex-1 flex flex-col justify-between bg-white">
+                            <div>
+                                <h4 class="text-sm md:text-base font-black text-slate-800 mb-1">云平台2.0页面优化设计</h4>
+                                <p class="text-[10px] md:text-xs text-slate-500 font-bold mb-2">华大生命科学研究院 BGI-Research</p>
+                            </div>
+                            <div class="flex justify-between items-center mt-3">
+                                <span class="text-[10px] font-bold bg-teal-50 text-teal-600 px-2 py-1 rounded-sm uppercase tracking-wider">UI / UX</span>
+                                <span class="text-[10px] text-gray-400 font-bold">2025.4 - 2026.2</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="listen-fm-gallery.html" class="project-card bg-white rounded-xl mac-window-shadow overflow-hidden flex flex-col h-full border border-gray-100 hover:shadow-2xl transition-shadow cursor-pointer block no-underline text-inherit">
+                        <div class="bg-gray-50/90 backdrop-blur px-3 py-2 flex items-center border-b border-gray-200">
+                             <div class="flex space-x-1.5">
+                                 <div class="w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-[#ff5f56] transition-colors"></div>
+                                 <div class="w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-[#ffbd2e] transition-colors"></div>
+                                 <div class="w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-[#27c93f] transition-colors"></div>
+                             </div>
+                             <div class="mx-auto text-[10px] text-gray-500 font-medium">02_listen-fm.pdf</div>
+                        </div>
+                        <div class="bg-gradient-to-br from-slate-700 to-slate-900 aspect-[4/3] relative overflow-hidden flex flex-col items-center justify-center text-white p-6 text-center">
+                             <div class="w-16 h-16 md:w-20 md:h-20 rounded-full border-4 border-slate-600 flex items-center justify-center shadow-2xl relative z-10 hover:rotate-45 transition-transform duration-700">
+                                 <div class="w-6 h-6 md:w-8 md:h-8 bg-slate-800 rounded-full border border-slate-500"></div>
+                             </div>
+                             <span class="font-serif-title italic font-bold text-sm md:text-base mt-4 opacity-80 relative z-10 text-slate-300">Immerse yourself</span>
+                        </div>
+                        <div class="p-4 md:p-5 flex-1 flex flex-col justify-between bg-white">
+                            <div>
+                                <h4 class="text-sm md:text-base font-black text-slate-800 mb-1">听听FM页面优化设计</h4>
+                                <p class="text-[10px] md:text-xs text-slate-500 font-bold mb-2">视听网络体验优化项目</p>
+                            </div>
+                            <div class="flex justify-between items-center mt-3">
+                                <span class="text-[10px] font-bold bg-slate-100 text-slate-600 px-2 py-1 rounded-sm uppercase tracking-wider">APP Redesign</span>
+                                <span class="text-[10px] text-gray-400 font-bold">2025</span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <a href="ximalaya-ip.html" target="_blank" rel="noopener noreferrer" class="project-card bg-white rounded-xl mac-window-shadow overflow-hidden flex flex-col h-full border border-gray-100 hover:shadow-2xl transition-shadow cursor-pointer block no-underline text-inherit">
+                        <div class="bg-gray-50/90 backdrop-blur px-3 py-2 flex items-center border-b border-gray-200">
+                             <div class="flex space-x-1.5">
+                                 <div class="w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-[#ff5f56] transition-colors"></div>
+                                 <div class="w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-[#ffbd2e] transition-colors"></div>
+                                 <div class="w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-[#27c93f] transition-colors"></div>
+                             </div>
+                             <div class="mx-auto text-[10px] text-gray-500 font-medium">03_ip-character.png</div>
+                        </div>
+                        <div class="bg-gradient-to-b from-[#86cbfb] to-[#b3defc] aspect-[4/3] relative overflow-hidden flex flex-col items-center justify-center text-white p-6 text-center">
+                             <div class="absolute top-4 right-4 flex space-x-1">
+                                 <div class="w-2 h-3 md:w-3 md:h-4 bg-red-400 rounded-full transform rotate-12"></div>
+                                 <div class="w-2 h-3 md:w-3 md:h-4 bg-yellow-400 rounded-full transform -rotate-12"></div>
+                             </div>
+                             <span class="font-black text-xl md:text-2xl tracking-tight relative z-10 text-white drop-shadow-md">Joyous-Cat</span>
+                             <span class="text-[10px] md:text-xs font-bold mt-2 bg-white/30 px-3 py-1 rounded-full relative z-10 text-slate-700">身临其境 音乐同行</span>
+                        </div>
+                        <div class="p-4 md:p-5 flex-1 flex flex-col justify-between bg-white">
+                            <div>
+                                <h4 class="text-sm md:text-base font-black text-slate-800 mb-1">喜马拉雅IP角色设计</h4>
+                                <p class="text-[10px] md:text-xs text-slate-500 font-bold mb-2">IP 形象与场景延展设计</p>
+                            </div>
+                            <div class="flex justify-between items-center mt-3">
+                                <span class="text-[10px] font-bold bg-blue-50 text-blue-600 px-2 py-1 rounded-sm uppercase tracking-wider">Illustration</span>
+                                <span class="text-[10px] text-gray-400 font-bold">2025</span>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+        <a href="design-outside.html" class="card-deal card-3 w-full relative z-30 group cursor-pointer block transform transition-transform duration-500 hover:-translate-y-2">
+            <div class="bg-white rounded-xl overflow-hidden mac-window-shadow border-t border-white/50">
+                <div class="bg-gray-50/90 backdrop-blur px-4 py-2.5 flex items-center justify-between border-b border-gray-200">
+                    <div class="flex space-x-1.5 items-center">
+                        <div class="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
+                        <div class="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
+                        <div class="w-3 h-3 rounded-full bg-[#27c93f]"></div>
+                    </div>
+                    <div class="text-sm text-gray-600 font-medium font-sans tracking-wide">设计之外.pdf</div>
+                    <div class="text-gray-400 text-xs font-bold tracking-widest">
+                        » <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4 inline"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
+                    </div>
+                </div>
+                <div class="bg-[#f8f9fb] p-8 md:p-12 flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 relative overflow-hidden bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLW9wYWNpdHk9IjAuMDIiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')]">
+                    
+                    <div class="bg-white p-5 pb-8 shadow-[0_8px_30px_rgb(0,0,0,0.06)] transform rotate-2 w-full max-w-[260px] relative border border-gray-100">
+                        <div class="absolute -top-4 left-1/2 -translate-x-1/2 w-8 h-8 flex flex-col items-center">
+                            <div class="w-6 h-3 border-2 border-gray-400 rounded-t-sm"></div>
+                            <div class="w-8 h-2 bg-gray-300 rounded-sm shadow-sm"></div>
+                        </div>
+                        <ul class="text-sm font-medium text-slate-600 mt-4 space-y-4">
+                            <li class="border-b border-gray-200 border-dashed pb-1">① 视觉方向：<span class="font-bold text-slate-800">IP 角色设计</span></li>
+                            <li class="border-b border-gray-200 border-dashed pb-1">② 角色设定：<span class="font-bold text-blue-500">Joyous-Cat</span></li>
+                            <li class="border-b border-gray-200 border-dashed pb-1">③ 延展场景：<span class="font-bold text-slate-800">多节气插画</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-[0_10px_40px_rgb(0,0,0,0.08)] p-4 flex items-center space-x-4 w-full max-w-[320px] border border-gray-50">
+                        <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-slate-700 to-slate-900 flex items-center justify-center shadow-inner relative overflow-hidden">
+                            <div class="w-6 h-6 bg-slate-800 rounded-full border border-slate-500 relative z-10"></div>
+                            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9zdmc+')] opacity-50"></div>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <div class="font-black text-slate-800 text-sm">设计之外</div>
+                                    <div class="text-xs text-slate-500 mt-0.5">点击查看详细</div>
+                                </div>
+                                <div class="w-8 h-8 rounded-full bg-indigo-500 text-white flex items-center justify-center shadow-md">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                                </div>
+                            </div>
+                            <div class="mt-3 bg-indigo-500 text-white text-xs font-bold px-4 py-1.5 rounded-full inline-flex items-center shadow-md">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5 mr-1"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 9.776c.112-.017.227-.026.344-.026h15.812c.117 0 .232.009.344.026m-16.5 0a2.25 2.25 0 00-1.883 2.542l.857 6a2.25 2.25 0 001.884 2.541l.857-.6A75.03 75.03 0 0118 12.75l-.857.6c.17.198.367.343.57.343h.008c.203 0 .4-.145.57-.343l.857-.6A75.03 75.03 0 0121 9.75l.857.6c.17.198.367.343.57.343h.008c.203 0 .4-.145.57-.343l.857-.6A2.25 2.25 0 0016.5 9.75z" /></svg>
+                                点击进入
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+
+    </main>
+
+    <section id="contact" class="relative z-50 flex justify-center mt-12 pb-20 px-6">
+        <a href="mailto:3248130448@qq.com" class="group flex items-center justify-center bg-white/90 backdrop-blur-md px-12 md:px-20 py-5 rounded-full shadow-[0_15px_30px_rgba(0,0,0,0.08),_0_0_0_4px_rgba(255,255,255,0.4)] hover:shadow-[0_20px_40px_rgba(0,0,0,0.12),_0_0_0_6px_rgba(255,255,255,0.5)] transition-all duration-300 transform hover:-translate-y-1">
+            <span class="text-xl md:text-2xl font-black text-slate-700 tracking-tight">3248130448@qq.com</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5 ml-4 text-gray-300 group-hover:text-blue-500 transition-colors">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+        </a>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('bg-white/40', 'backdrop-blur-md', 'shadow-sm');
+                } else {
+                    navbar.classList.remove('bg-white/40', 'backdrop-blur-md', 'shadow-sm');
+                }
+            });
+        });
+
+        // 创建云雾过渡元素
+        function createCloudMist() {
+            const mist = document.createElement('div');
+            mist.className = 'cloud-transition-overlay';
+            mist.id = 'cloudOverlay';
+            document.body.appendChild(mist);
+            return mist;
+        }
+
+        function toggleProjects(event) {
+            if(event) event.preventDefault();
+            const container = document.getElementById('projects-container');
+            const hintText = document.getElementById('click-hint-text');
+            const hintIcon = document.getElementById('click-hint-icon');
+            
+            if (container.classList.contains('hidden')) {
+                container.classList.remove('hidden');
+                if(hintText) hintText.innerText = "收起作品集卡片";
+                if(hintIcon) hintIcon.classList.add('rotate-180');
+                
+                void container.offsetWidth;
+                
+                container.classList.remove('opacity-0', '-translate-y-8', 'hiding');
+                container.classList.add('visible');
+                
+                setTimeout(() => {
+                    container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            } else {
+                container.classList.remove('visible');
+                container.classList.add('hiding');
+                if(hintText) hintText.innerText = "点击展开 3 个作品卡片";
+                if(hintIcon) hintIcon.classList.remove('rotate-180');
+                
+                setTimeout(() => {
+                    container.classList.add('hidden');
+                    container.classList.remove('hiding');
+                }, 500); 
+            }
+        }
+
+        // 页面过渡函数
+        function navigateWithCloudTransition(url) {
+            const overlay = document.getElementById('cloudOverlay') || createCloudMist();
+            const mainContent = document.querySelector('main');
+            const navbar = document.getElementById('navbar');
+            const realClouds = document.querySelector('.real-cloud')?.parentElement;
+
+            // 添加云雾
+            overlay.classList.add('active');
+
+            // 让主页后退
+            if (mainContent) mainContent.classList.add('home-retreating');
+            if (navbar) navbar.classList.add('home-retreating');
+            if (realClouds) realClouds.classList.add('home-retreating');
+
+            // 云雾散去后跳转
+            setTimeout(() => {
+                window.location.href = url;
+            }, 600);
+        }
+
+        // 监听卡片点击
+        document.addEventListener('DOMContentLoaded', () => {
+            // 为作品集卡片添加点击事件
+            document.querySelectorAll('.project-card, .card-deal a[href$=".html"]').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    const href = card.getAttribute('href');
+                    if (href && href.endsWith('.html')) {
+                        e.preventDefault();
+                        navigateWithCloudTransition(href);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
